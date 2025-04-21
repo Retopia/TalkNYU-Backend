@@ -8,12 +8,6 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   namespace :api do
     namespace :v1 do
-      get "auth/login"
-      get "auth/register"
-      get "posts/show"
-      get "posts/index"
-      get "posts/create"
-      get "posts/destroy"
       post "/login", to: "auth#login"
       post "/register", to: "auth#register"
       get "/posts/:id", to: "posts#show"

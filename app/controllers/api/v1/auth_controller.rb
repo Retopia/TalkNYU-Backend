@@ -1,9 +1,11 @@
 class Api::V1::AuthController < ApplicationController
   def login
+    Rails.logger.debug "FULL PARAMS: #{params.to_unsafe_h.inspect}"
     user = User.find_by(username: login_params[:username])
 
     if user&.authenticate(login_params[:password])
-      render json: { message: "Login successful", user: user }, status: :ok
+      token = JsonWebToken.encode(user_id: user.id)
+      render json: { message: "Login successful", token: token, user: user }, status: :ok
     else
       render json: { errors: [ "Invalid username or password" ] }, status: :unauthorized
     end
@@ -13,17 +15,18 @@ class Api::V1::AuthController < ApplicationController
     user = User.new(register_params)
 
     if user.save
-      render json: { message: "User created successfully", user: user }, status: :created
+      token = JsonWebToken.encode(user_id: user.id)
+      render json: { message: "User created successfully", token: token, user: user }, status: :created
     else
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def login_params
-    params.require(:user).permit(:username, :password)
+    params.permit(:username, :password)
   end
 
   def register_params
-    params.require(:user).permit(:username, :email, :password, :password_confirmation)
+    params.permit(:username, :email, :password, :password_confirmation)
   end
 end
