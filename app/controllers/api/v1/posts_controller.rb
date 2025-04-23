@@ -3,7 +3,13 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def index
-    posts = Post.includes(:user).order(created_at: :desc)
+    if params[:search].present?
+      posts_search = Post.where("title ILIKE ? OR body ILIKE ?", "%#{params[:search]}%", "%#{params[:search]}%")
+    else
+      posts_search = Post.all
+    end
+
+    posts = posts_search.includes(:user).order(created_at: :desc)
     posts_edited = posts.map do |post|
       {
         id: post.id,
