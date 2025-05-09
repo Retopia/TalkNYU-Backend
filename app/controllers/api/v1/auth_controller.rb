@@ -1,6 +1,5 @@
 class Api::V1::AuthController < ApplicationController
   def login
-    Rails.logger.debug "FULL PARAMS: #{params.to_unsafe_h.inspect}"
     user = User.find_by(username: login_params[:username])
 
     if user&.authenticate(login_params[:password])

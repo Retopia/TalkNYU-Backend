@@ -1,9 +1,11 @@
 class ApplicationController < ActionController::API
   before_action :authorize_request
 
-  attr_reader :current_user
-
   private
+
+  def current_user
+    @current_user
+  end
 
   def authorize_request
     header = request.headers['Authorization']
