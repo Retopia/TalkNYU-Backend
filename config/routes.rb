@@ -12,7 +12,7 @@ Rails.application.routes.draw do
       post "/login", to: "auth#login"
       post "/register", to: "auth#register"
 
-      # Login
+      # Posts
       get "/posts/:id", to: "posts#show"
       get "/posts", to: "posts#index"
       post "/posts", to: "posts#create"
@@ -21,6 +21,11 @@ Rails.application.routes.draw do
       # Like
       post "/posts/:id/like", to: "likes#create"
       delete "/posts/:id/like", to: "likes#destroy"
+
+      # Comment
+      post "/posts/:id/comment", to: "comments#create"
+      delete "/posts/:id/comment/:comment_id", to: "comments#destroy"
+      patch "/posts/:id/comment/:comment_id", to: "comments#update"
     end
   end
 end

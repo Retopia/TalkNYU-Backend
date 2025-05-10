@@ -1,5 +1,25 @@
 class Api::V1::PostsController < ApplicationController
   def show
+    post = Post.includes(:user, :likes, comments: :user).find(params[:id])
+
+    render json: {
+      id: post.id,
+      owner: post.user.username,
+      title: post.title,
+      body: post.body,
+      created_at: post.created_at,
+      likes: post.likes.size,
+      comments: post.comments.map do |comment|
+        {
+          post_id: post.id,
+          comment_id: comment.id,
+          author: comment.user.username,
+          body: comment.content,
+          created_at: comment.created_at
+        }
+      end,
+      has_liked: current_user ? post.likes.any? { |like| like.user_id == current_user.id } : false
+    }
   end
 
   def index

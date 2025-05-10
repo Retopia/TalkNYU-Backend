@@ -1,5 +1,7 @@
 source "https://rubygems.org"
 
+gem "solargraph"
+gem "solargraph-rails"
 gem "jwt"
 gem 'dotenv-rails', groups: [:development, :test]
 
